@@ -383,7 +383,7 @@ h1 em::after{
   transition:max-height 1.3s ease,opacity .9s ease,transform .9s cubic-bezier(.2,.75,.2,1);
 }
 body.opened .note{
-  max-height:2500px;
+  max-height:3500px;
   opacity:1;
   transform:translateY(0);
   transition-delay:.7s;
@@ -472,6 +472,166 @@ body.opened .note{
   letter-spacing:10px;
   margin-top:14px;
   opacity:.9;
+}
+
+/* ——— ИНТЕРАКТИВНАЯ ИГРА ——— */
+.question-box{
+  margin-top:45px;
+  padding-top:35px;
+  border-top:1px dashed #d98da0;
+  text-align:center;
+}
+.game-title{
+  font:600 24px 'Playfair Display', serif;
+  color:#8b3652;
+  margin-bottom:30px;
+}
+.quiz-item{
+  margin-bottom:30px;
+  text-align:left;
+  background:#fff8f5;
+  padding:20px;
+  border-radius:14px;
+  border:1px solid #f4d8dd;
+  box-shadow:0 4px 15px #d98da00a;
+}
+.quiz-question{
+  font:600 16px 'DM Sans', sans-serif;
+  color:#8b3652;
+  margin-bottom:15px;
+}
+.quiz-options{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.quiz-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 15px;
+  border-radius:12px;
+  border:1px solid #e6a8b7;
+  background:#fff;
+  cursor:pointer;
+  transition:.3s;
+  font-size:15px;
+  color:#a35a70;
+}
+.quiz-label:hover{
+  background:#fdf2f5;
+  border-color:#d98da0;
+}
+.quiz-label input[type="checkbox"]{
+  display:none;
+}
+.quiz-label .checkmark{
+  width:20px;
+  height:20px;
+  border:2px solid #e6a8b7;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.2s;
+  flex-shrink:0;
+}
+.quiz-label input:checked + .checkmark{
+  background:#d98da0;
+  border-color:#d98da0;
+}
+.quiz-label input:checked + .checkmark::after{
+  content:"✓";
+  color:#fff;
+  font-size:12px;
+  font-weight:bold;
+}
+.quiz-label.selected{
+  border-color:#d98da0;
+  background:#fdf2f5;
+}
+.custom-input-box{
+  display:none;
+  margin-top:10px;
+}
+.custom-input-box input{
+  width:100%;
+  padding:12px 15px;
+  border-radius:12px;
+  border:1px solid #e6a8b7;
+  background:#fff;
+  font:14px 'DM Sans', sans-serif;
+  color:#4a2e38;
+  outline:none;
+}
+.custom-input-box input:focus{
+  border-color:#d98da0;
+  box-shadow:0 0 0 3px #f0a8b933;
+}
+
+/* Поле для общего текста */
+.text-answer-box{
+  margin-top:25px;
+  text-align:left;
+}
+.text-answer-box label{
+  display:block;
+  font:600 14px 'DM Sans', sans-serif;
+  color:#8b3652;
+  margin-bottom:10px;
+}
+.text-answer-box textarea{
+  width:100%;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid #e6a8b7;
+  background:#fff;
+  font:14px 'DM Sans', sans-serif;
+  color:#4a2e38;
+  resize:vertical;
+  min-height:80px;
+  outline:none;
+  transition:.3s;
+}
+.text-answer-box textarea:focus{
+  border-color:#d98da0;
+  box-shadow:0 0 0 4px #f0a8b933;
+}
+.submit-btn{
+  margin-top:20px;
+  width:100%;
+  padding:16px;
+  border-radius:30px;
+  border:none;
+  background:linear-gradient(180deg,#d98da0,#b94e70);
+  color:#fff;
+  font:700 16px 'DM Sans', sans-serif;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 8px 20px -8px #b94e70aa;
+}
+.submit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 25px -8px #b94e70cc;
+}
+.submit-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  transform:none;
+}
+.success-msg{
+  display:none;
+  margin-top:20px;
+  padding:20px;
+  background:#e8f5e9;
+  color:#2e7d32;
+  border-radius:12px;
+  font:italic 16px 'Playfair Display', serif;
+  animation:fadeIn .6s ease forwards;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .actions{
@@ -617,6 +777,111 @@ footer span{color:#e59bb0}
 
       <p class="signature">Твой человек <span>который очень тобой дорожит</span></p>
       <div class="heart-row">♥ ♥ ♥</div>
+
+      <!-- ИНТЕРАКТИВНЫЙ БЛОК -->
+      <div class="question-box">
+        <div class="game-title">Мини-игра на память 🤭</div>
+        
+        <!-- Вопрос 1 -->
+        <div class="quiz-item">
+          <div class="quiz-question">1. О чём я подумал, когда мы только встретились и ещё молчали?</div>
+          <div class="quiz-options">
+            <label class="quiz-label">
+              <input type="checkbox" name="q1" value="Блин, кажется, мы не найдём общий язык...">
+              <span class="checkmark"></span>
+              Блин, кажется, мы не найдём общий язык...
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q1" value="Она такая красивая, я вообще забыл слова">
+              <span class="checkmark"></span>
+              Она такая красивая, я вообще забыл слова
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q1" value="Скорее бы заговорить про Егора Крида, чтобы она засмеялась">
+              <span class="checkmark"></span>
+              Скорее бы заговорить про Егора Крида
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q1" value="custom" onchange="toggleCustom(this, 'custom1')">
+              <span class="checkmark"></span>
+              Свой вариант
+            </label>
+          </div>
+          <div class="custom-input-box" id="custom1">
+            <input type="text" placeholder="Напиши свой вариант...">
+          </div>
+        </div>
+
+        <!-- Вопрос 2 -->
+        <div class="quiz-item">
+          <div class="quiz-question">2. Что я чувствовал, когда ехал домой в метро после нашей прогулки?</div>
+          <div class="quiz-options">
+            <label class="quiz-label">
+              <input type="checkbox" name="q2" value="Обычную усталость и хотел спать">
+              <span class="checkmark"></span>
+              Обычную усталость и хотел спать
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q2" value="Дикое счастье и понял, что влюбился">
+              <span class="checkmark"></span>
+              Дикое счастье и понял, что влюбился
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q2" value="Думал только о том, какую шаурму заказать">
+              <span class="checkmark"></span>
+              Думал только о шаурме
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q2" value="custom" onchange="toggleCustom(this, 'custom2')">
+              <span class="checkmark"></span>
+              Свой вариант
+            </label>
+          </div>
+          <div class="custom-input-box" id="custom2">
+            <input type="text" placeholder="Напиши свой вариант...">
+          </div>
+        </div>
+
+        <!-- Вопрос 3 -->
+        <div class="quiz-item">
+          <div class="quiz-question">3. Какая моя любимая черта в тебе?</div>
+          <div class="quiz-options">
+            <label class="quiz-label">
+              <input type="checkbox" name="q3" value="Твоя милая улыбка">
+              <span class="checkmark"></span>
+              Твоя милая улыбка
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q3" value="Твой смех и то, как ты рофлишь">
+              <span class="checkmark"></span>
+              Твой смех и то, как ты рофлишь
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q3" value="Твоя искренность и доброта">
+              <span class="checkmark"></span>
+              Твоя искренность и доброта
+            </label>
+            <label class="quiz-label">
+              <input type="checkbox" name="q3" value="custom" onchange="toggleCustom(this, 'custom3')">
+              <span class="checkmark"></span>
+              Свой вариант
+            </label>
+          </div>
+          <div class="custom-input-box" id="custom3">
+            <input type="text" placeholder="Напиши свой вариант...">
+          </div>
+        </div>
+
+        <!-- Поле для общего текста -->
+        <div class="text-answer-box">
+          <label for="custom-text">Хочешь что-то добавить от себя? (необязательно)</label>
+          <textarea id="custom-text" placeholder="Напиши здесь, если хочешь..."></textarea>
+        </div>
+
+        <button class="submit-btn" id="submit-quiz" onclick="submitQuiz()">Отправить ответы</button>
+        <div class="success-msg" id="success-msg">Твои ответы отправлены! Спасибо ❤️</div>
+      </div>
+
     </article>
 
     <div class="actions">
@@ -692,6 +957,93 @@ footer span{color:#e59bb0}
   });
   document.getElementById('close').addEventListener('click', closeLetter);
   document.getElementById('hearts').addEventListener('click', () => burst(36));
+
+  // Логика чекбоксов
+  document.querySelectorAll('.quiz-label').forEach(label => {
+    label.addEventListener('click', function() {
+      const input = this.querySelector('input');
+      if(input.type === 'checkbox' && input.value === 'custom') {
+         // Если нажали на "Свой вариант", ставим галочку и показываем поле
+         input.checked = !input.checked;
+         const boxId = this.querySelector('input').getAttribute('onchange').match(/'([^']+)'/)[1];
+         const box = document.getElementById(boxId);
+         if(box) box.style.display = input.checked ? 'block' : 'none';
+      }
+      // Визуальное выделение
+      setTimeout(() => {
+        document.querySelectorAll(`input[name="${input.name}"]`).forEach(inp => {
+           inp.closest('.quiz-label').classList.toggle('selected', inp.checked);
+        });
+      }, 10);
+    });
+  });
+
+  window.toggleCustom = function(checkbox, boxId) {
+    const box = document.getElementById(boxId);
+    if(box) box.style.display = checkbox.checked ? 'block' : 'none';
+  };
+
+  window.submitQuiz = function() {
+    const btn = document.getElementById('submit-quiz');
+    btn.disabled = true;
+    btn.textContent = 'Отправка...';
+
+    let message = "Ответы от Кристины 💌\n\n";
+
+    // Функция для сбора ответов по имени
+    function getAnswers(name, boxId) {
+      let answers = [];
+      document.querySelectorAll(`input[name="${name}"]:checked`).forEach(inp => {
+        if(inp.value === 'custom') {
+          const customText = document.getElementById(boxId).querySelector('input').value.trim();
+          if(customText) answers.push("Свой вариант: " + customText);
+        } else {
+          answers.push(inp.value);
+        }
+      });
+      return answers.length > 0 ? answers.join(', ') : "Не ответила";
+    }
+
+    message += "1. Первая встреча: " + getAnswers('q1', 'custom1') + "\n";
+    message += "2. Поездка в метро: " + getAnswers('q2', 'custom2') + "\n";
+    message += "3. Любимая черта: " + getAnswers('q3', 'custom3') + "\n";
+
+    const customText = document.getElementById('custom-text').value.trim();
+    if(customText) {
+      message += "\n💬 Её сообщение:\n" + customText;
+    }
+
+    // ⚠️ ЗДЕСЬ ТВОИ ДАННЫЕ ИЗ TELEGRAM
+    const BOT_TOKEN = '9002404224:AAFaTcWN-mm7LYHw08bkSYLCLn4bRxYrHLQ';
+    const CHAT_ID = '109072447';
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.ok) {
+        document.getElementById('success-msg').style.display = 'block';
+        document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+        burst(50);
+      } else {
+        alert("Ошибка при отправке. Попробуй еще раз.");
+        btn.disabled = false;
+        btn.textContent = 'Отправить ответы';
+      }
+    })
+    .catch(err => {
+      alert("Ошибка сети. Проверь интернет.");
+      btn.disabled = false;
+      btn.textContent = 'Отправить ответы';
+    });
+  };
 
   function burst(count){
     if(prefersReduced) return;
