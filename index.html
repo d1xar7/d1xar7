@@ -27,8 +27,7 @@ body{
   min-height:100vh;
   color:#fff7f3;
   font-family:'DM Sans',system-ui,sans-serif;
-  background:
-    radial-gradient(ellipse 120% 80% at 50% 0%, #6a3a50 0%, #3a2238 32%, #1d1424 62%, #100b15 100%);
+  background: radial-gradient(ellipse 120% 80% at 50% 0%, #6a3a50 0%, #3a2238 32%, #1d1424 62%, #100b15 100%);
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
@@ -44,6 +43,112 @@ body::before{
   mix-blend-mode:soft-light;
 }
 
+/* ——— ЭКРАН БЛОКИРОВКИ ——— */
+#lock-screen{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:radial-gradient(ellipse at 50% 30%, #4a2438 0%, #1d1424 60%, #0f0a14 100%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  transition:opacity .8s ease, visibility .8s ease;
+}
+#lock-screen.hidden{
+  opacity:0;
+  visibility:hidden;
+}
+.lock-box{
+  background:#ffffff0a;
+  border:1px solid #ffffff18;
+  padding:40px 30px;
+  border-radius:16px;
+  text-align:center;
+  max-width:400px;
+  width:100%;
+  box-shadow:0 20px 50px #00000080, inset 0 1px 0 #ffffff1a;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.lock-icon{
+  font-size:40px;
+  margin-bottom:15px;
+  animation:pulse-lock 2s infinite ease-in-out;
+}
+@keyframes pulse-lock{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+.lock-box h2{
+  font:600 24px 'Playfair Display', serif;
+  color:var(--pink);
+  margin-bottom:10px;
+}
+.lock-box p{
+  color:var(--text-soft);
+  font-size:14px;
+  margin-bottom:25px;
+}
+.lock-input{
+  width:100%;
+  padding:14px 18px;
+  border-radius:30px;
+  border:1px solid #ffffff33;
+  background:#ffffff0f;
+  color:#fff;
+  font-size:16px;
+  font-family:'DM Sans', sans-serif;
+  text-align:center;
+  outline:none;
+  transition:.3s;
+  margin-bottom:15px;
+}
+.lock-input:focus{
+  border-color:var(--pink);
+  background:#ffffff1a;
+  box-shadow:0 0 0 4px #f0a8b933;
+}
+.lock-input.error{
+  border-color:#ff4d4d;
+  box-shadow:0 0 0 4px #ff4d4d33;
+  animation:shake .4s;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+.lock-btn{
+  width:100%;
+  padding:14px;
+  border-radius:30px;
+  border:none;
+  background:linear-gradient(180deg,#e9a2b3,#d98da0);
+  color:#351a27;
+  font:700 16px 'DM Sans', sans-serif;
+  cursor:pointer;
+  transition:.25s;
+  box-shadow:0 8px 20px -8px #d98da0aa;
+}
+.lock-btn:hover{
+  transform:translateY(-2px);
+  background:linear-gradient(180deg,#f4b5c4,#efadbc);
+}
+.lock-error-msg{
+  color:#ff6b6b;
+  font-size:13px;
+  margin-top:12px;
+  height:18px;
+  opacity:0;
+  transition:.3s;
+}
+.lock-error-msg.show{
+  opacity:1;
+}
+
+/* ——— ОСНОВНОЙ САЙТ ——— */
 .glow{
   position:fixed;
   width:clamp(320px,50vw,520px);
@@ -278,7 +383,7 @@ h1 em::after{
   transition:max-height 1.3s ease,opacity .9s ease,transform .9s cubic-bezier(.2,.75,.2,1);
 }
 body.opened .note{
-  max-height:2200px;
+  max-height:2500px;
   opacity:1;
   transform:translateY(0);
   transition-delay:.7s;
@@ -293,9 +398,7 @@ body.opened .note{
   border-radius:10px;
   padding:clamp(30px,6.5vw,56px);
   text-align:left;
-  box-shadow:
-    0 30px 80px -20px #06030999,
-    0 2px 0 #ffffff inset;
+  box-shadow: 0 30px 80px -20px #06030999, 0 2px 0 #ffffff inset;
 }
 .paper::before{
   content:"";
@@ -454,6 +557,19 @@ footer span{color:#e59bb0}
 </style>
 </head>
 <body>
+
+<!-- Экран блокировки -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <h2>Это личное письмо</h2>
+    <p>Скажи наше любимое слово?</p>
+    <input type="password" id="password-input" class="lock-input" placeholder="Введи слово..." autocomplete="off">
+    <button id="unlock-btn" class="lock-btn">Открыть конверт</button>
+    <div class="lock-error-msg" id="error-msg">Не то слово, попробуй ещё раз 🙈</div>
+  </div>
+</div>
+
 <div class="glow g1"></div>
 <div class="glow g2"></div>
 <div id="particles" aria-hidden="true"></div>
@@ -514,6 +630,34 @@ footer span{color:#e59bb0}
 
 <script>
 (() => {
+  // Логика пароля
+  const lockScreen = document.getElementById('lock-screen');
+  const passwordInput = document.getElementById('password-input');
+  const unlockBtn = document.getElementById('unlock-btn');
+  const errorMsg = document.getElementById('error-msg');
+  const SECRET_WORD = "вася";
+
+  function tryUnlock() {
+    const entered = passwordInput.value.trim().toLowerCase();
+    if (entered === SECRET_WORD) {
+      lockScreen.classList.add('hidden');
+      setTimeout(() => { lockScreen.style.display = 'none'; }, 800);
+    } else {
+      passwordInput.classList.add('error');
+      errorMsg.classList.add('show');
+      setTimeout(() => { passwordInput.classList.remove('error'); }, 500);
+    }
+  }
+
+  unlockBtn.addEventListener('click', tryUnlock);
+  passwordInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+  passwordInput.addEventListener('input', () => {
+    errorMsg.classList.remove('show');
+  });
+
+  // Логика открытки
   const envelope = document.getElementById('envelope');
   const tap = document.getElementById('tap');
   const note = document.getElementById('note');
