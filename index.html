@@ -1027,7 +1027,7 @@ footer span{color:#e59bb0}
     if(box) box.style.display = checkbox.checked ? 'block' : 'none';
   };
 
-  // ⚠️ ОТПРАВКА ЧЕРЕЗ CORS-ПРОКСИ (100% РАБОТАЕТ)
+  // ⚠️ ОТПРАВКА ЧЕРЕЗ ТВОЙ CLOUDFLARE WORKER
   window.submitQuiz = function() {
     const btn = document.getElementById('submit-quiz');
     btn.disabled = true;
@@ -1060,10 +1060,10 @@ footer span{color:#e59bb0}
     const BOT_TOKEN = '9002404224:AAFaTcWN-mm7LYHw08bkSYLCLn4bRxYrHLQ';
     const CHAT_ID = '109072447';
     
-    // Ссылка на Telegram
     const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    // Прокси, который обходит блокировки браузера
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(telegramUrl)}`;
+    
+    // Ссылка на твой воркер Cloudflare
+    const proxyUrl = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/?url=${encodeURIComponent(telegramUrl)}`;
 
     fetch(proxyUrl, {
       method: 'POST',
@@ -1087,7 +1087,7 @@ footer span{color:#e59bb0}
       }
     })
     .catch(err => {
-      alert("Ошибка сети. Прокси не отвечает. Попробуй еще раз.");
+      alert("Ошибка сети. Воркер не отвечает. Попробуй еще раз.");
       btn.disabled = false;
       btn.textContent = 'Отправить ответы';
     });
