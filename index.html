@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#140d16">
+<title>Кристина, у меня к тебе кое-что… 💌</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+:root{
+  --pink:#f0a8b9;
+  --rose:#b94e70;
+  --paper:#fff8f0;
+  --ink:#452b36;
+  --bg-deep:#120c17;
+  --bg-mid:#2b1a2a;
+  --bg-glow:#5a2f43;
+  --line:#ffffff22;
+  --text-soft:#e7cbd3;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+body{
+  min-height:100vh;
+  color:#fff7f3;
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%, #6a3a50 0%, #3a2238 32%, #1d1424 62%, #100b15 100%);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.045;
+  z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:soft-light;
+}
+
+.glow{
+  position:fixed;
+  width:clamp(320px,50vw,520px);
+  aspect-ratio:1;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:.22;
+  pointer-events:none;
+  z-index:0;
+  will-change:transform;
+}
+.g1{background:#e56f91;top:-25%;left:-15%;animation:drift 22s ease-in-out infinite alternate}
+.g2{background:#8f5a92;right:-18%;bottom:-22%;animation:drift 26s ease-in-out infinite alternate-reverse}
+@keyframes drift{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(4%,3%) scale(1.08)}
+}
+
+#particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.spark{
+  position:absolute;
+  color:#f6c3d0;
+  opacity:0;
+  animation:float 8s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+@keyframes float{
+  0%,100%{opacity:0;transform:translateY(14px) scale(.72)}
+  35%,65%{opacity:.6}
+  50%{transform:translateY(-22px) scale(1.14)}
+}
+
+main{
+  width:min(100% - 40px, 820px);
+  margin:auto;
+  text-align:center;
+  position:relative;
+  z-index:2;
+  padding:clamp(44px,7vw,80px) 0 48px;
+}
+
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:40px;
+  padding:9px 16px;
+  color:#f1c4cf;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  background:#ffffff0a;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  box-shadow:inset 0 1px 0 #ffffff1a, 0 8px 24px -12px #00000080;
+}
+.kicker::before,.kicker::after{content:"✦";font-size:9px;color:#eaa2b5;opacity:.9}
+
+h1{
+  font:500 clamp(44px,8.5vw,82px)/.98 'Playfair Display',serif;
+  margin:26px 0 14px;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+  text-shadow:0 2px 30px #00000055;
+}
+h1 em{
+  color:var(--pink);
+  font-weight:500;
+  font-style:italic;
+  position:relative;
+  display:inline-block;
+}
+h1 em::after{
+  content:"";
+  position:absolute;
+  left:4%;right:4%;
+  bottom:.06em;
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg,transparent,#f0a8b9aa 30%,#f0a8b9aa 70%,transparent);
+  opacity:.65;
+}
+
+.lead{
+  max-width:500px;
+  margin:0 auto;
+  color:var(--text-soft);
+  font-size:clamp(13px,1.6vw,15px);
+  line-height:1.85;
+  text-wrap:pretty;
+}
+
+.scene{
+  height:340px;
+  display:grid;
+  place-items:center;
+  perspective:1200px;
+  margin:18px auto 0;
+}
+
+.envelope{
+  position:relative;
+  width:min(360px,86vw);
+  height:230px;
+  cursor:pointer;
+  filter:drop-shadow(0 30px 42px #08040c99);
+  transition:transform .35s cubic-bezier(.2,.75,.2,1);
+  outline:none;
+  border-radius:10px;
+  -webkit-tap-highlight-color:transparent;
+}
+.envelope:hover{transform:translateY(-6px) rotate(-.6deg)}
+.envelope:focus-visible{box-shadow:0 0 0 3px #f0a8b966, 0 0 0 6px #f0a8b926;border-radius:10px}
+.envelope:active{transform:translateY(-2px) scale(.995)}
+
+.env-body{
+  position:absolute;
+  inset:0;
+  border-radius:10px;
+  background:linear-gradient(150deg,#f6cfd4,#d9869c 55%,#c9748c);
+  overflow:hidden;
+  box-shadow:inset 0 1px 0 #ffffff4d, inset 0 -2px 10px #8a3a5255;
+}
+.env-body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(32deg,transparent 49.4%,#e2a0ae 49.9%,#f8dadd 50.3%,transparent 50.9%),
+    linear-gradient(-32deg,transparent 49.4%,#e2a0ae 49.9%,#f8dadd 50.3%,transparent 50.9%);
+  z-index:3;
+  opacity:.9;
+}
+.env-pocket{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(150deg,#ebaebc,#c56d86);
+  clip-path:polygon(0 100%,0 0,50% 58%,100% 0,100% 100%);
+  z-index:4;
+  box-shadow:inset 0 1px 0 #ffffff33;
+}
+
+.flap{
+  position:absolute;
+  left:0;top:0;
+  width:100%;height:60%;
+  background:linear-gradient(160deg,#ffe3e1,#d98b9f 70%,#cf8195);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;
+  transition:transform .9s cubic-bezier(.2,.75,.2,1);
+  z-index:6;
+  backface-visibility:hidden;
+  box-shadow:inset 0 1px 0 #ffffff66;
+}
+
+.seal{
+  position:absolute;
+  z-index:7;
+  left:50%;top:55%;
+  transform:translate(-50%,-50%);
+  width:54px;height:54px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 26%,#dd7a93,#8f2c48 68%,#6f1f36 100%);
+  box-shadow:
+    0 6px 16px #6f203a80,
+    inset 0 1px 2px #ffffff4d,
+    inset 0 -2px 6px #4a0f2077;
+  color:#ffe8eb;
+  font-size:24px;
+  line-height:1;
+  transition:opacity .4s ease, transform .45s cubic-bezier(.2,.75,.2,1);
+  text-shadow:0 1px 1px #5a142766;
+}
+.seal::after{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border-radius:50%;
+  border:1px dashed #ffffff40;
+  opacity:.6;
+}
+
+.letter-peek{
+  position:absolute;
+  z-index:2;
+  left:5%;bottom:5%;
+  width:90%;height:88%;
+  background:linear-gradient(160deg,#fffcf6,#f3e5dd);
+  border-radius:6px;
+  color:#79354b;
+  display:grid;
+  place-content:center;
+  gap:8px;
+  transition:transform 1s cubic-bezier(.2,.75,.2,1);
+  box-shadow:0 -6px 20px #6a334122;
+}
+.letter-peek b{
+  font:600 clamp(24px,4.5vw,29px) 'Playfair Display',serif;
+  letter-spacing:-.01em;
+}
+.letter-peek small{
+  letter-spacing:.16em;
+  font-size:9px;
+  text-transform:uppercase;
+  color:#a77c82;
+  font-weight:600;
+}
+
+.envelope.open .flap{transform:rotateX(180deg);z-index:1}
+.envelope.open .letter-peek{transform:translateY(-152px);z-index:8;transition-delay:.12s}
+.envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-25deg)}
+
+.tap{
+  font-size:11px;
+  letter-spacing:.2em;
+  color:#f0c7d1;
+  text-transform:uppercase;
+  margin-top:-6px;
+  animation:pulse 2.4s ease-in-out infinite;
+  transition:color .3s;
+}
+@keyframes pulse{50%{opacity:.5}}
+
+.note{
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transform:translateY(26px);
+  transition:max-height 1.3s ease,opacity .9s ease,transform .9s cubic-bezier(.2,.75,.2,1);
+}
+body.opened .note{
+  max-height:2200px;
+  opacity:1;
+  transform:translateY(0);
+  transition-delay:.7s;
+}
+
+.paper{
+  position:relative;
+  max-width:640px;
+  margin:0 auto;
+  background:linear-gradient(155deg,#fffbf6,#f6e9e1);
+  color:var(--ink);
+  border-radius:10px;
+  padding:clamp(30px,6.5vw,56px);
+  text-align:left;
+  box-shadow:
+    0 30px 80px -20px #06030999,
+    0 2px 0 #ffffff inset;
+}
+.paper::before{
+  content:"";
+  position:absolute;
+  inset:11px;
+  border:1px solid #e3c8c3;
+  border-radius:5px;
+  pointer-events:none;
+}
+.paper::after{
+  content:"♡";
+  position:absolute;
+  right:26px;top:14px;
+  font:32px/1 'Playfair Display',serif;
+  color:#d99aaa;
+  opacity:.65;
+}
+
+.paper .salute{
+  text-align:center;
+  font:italic 15px 'Playfair Display',serif;
+  color:#a35a70;
+  margin:0 0 6px;
+  letter-spacing:.02em;
+}
+.paper h2{
+  text-align:center;
+  font:600 clamp(30px,6vw,44px)/1.1 'Playfair Display',serif;
+  color:#8b3652;
+  margin:0 0 26px;
+  letter-spacing:-.02em;
+}
+.paper p{
+  font:clamp(15px,2.4vw,17px)/1.8 'DM Sans',sans-serif;
+  margin:0 0 16px;
+  color:#4a2e38;
+  text-wrap:pretty;
+}
+.paper p strong{color:#923c59;font-weight:600}
+
+.aside{
+  margin:22px 0;
+  padding:15px 18px;
+  border-left:2px solid #d98da0;
+  background:#f8ece6;
+  border-radius:0 8px 8px 0;
+  color:#77515c;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.signature{
+  font:italic 22px 'Playfair Display',serif!important;
+  text-align:right;
+  color:#943d5a;
+  margin-top:28px!important;
+}
+.signature span{
+  display:block;
+  font:600 10px 'DM Sans',sans-serif;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-top:8px;
+  color:#a77c82;
+}
+
+.heart-row{
+  text-align:center;
+  color:#c25b79;
+  font-size:22px;
+  letter-spacing:10px;
+  margin-top:14px;
+  opacity:.9;
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:28px 0 0;
+}
+.btn{
+  border:1px solid #e6a8b7;
+  color:#f8dce3;
+  background:#ffffff0c;
+  border-radius:40px;
+  padding:13px 22px;
+  font:600 11px 'DM Sans',sans-serif;
+  letter-spacing:.09em;
+  cursor:pointer;
+  transition:background .25s,transform .25s,box-shadow .25s,border-color .25s;
+  -webkit-tap-highlight-color:transparent;
+  backdrop-filter:blur(4px);
+}
+.btn:hover{background:#ffffff1c;transform:translateY(-2px);box-shadow:0 10px 24px -10px #f0a8b955}
+.btn:active{transform:translateY(0) scale(.985)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px #f0a8b955}
+.btn.primary{
+  background:linear-gradient(180deg,#e9a2b3,#d98da0);
+  border-color:#e9a2b3;
+  color:#351a27;
+  box-shadow:0 8px 24px -10px #d98da0aa, inset 0 1px 0 #ffffff66;
+}
+.btn.primary:hover{
+  background:linear-gradient(180deg,#f4b5c4,#efadbc);
+  border-color:#f4b5c4;
+}
+
+footer{
+  margin-top:48px;
+  color:#b99aa8;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  line-height:1.9;
+}
+footer span{color:#e59bb0}
+
+.confetti{
+  position:fixed;
+  pointer-events:none;
+  z-index:20;
+  font-size:20px;
+  animation:pop 1.5s cubic-bezier(.15,.7,.3,1) forwards;
+  will-change:transform,opacity;
+}
+@keyframes pop{
+  0%{opacity:0;transform:translate(0,0) scale(.35)}
+  15%{opacity:1}
+  100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(45deg) scale(1.35)}
+}
+
+@media (max-width:480px){
+  main{padding-top:clamp(32px,7vw,52px)}
+  .scene{height:300px;margin-top:8px}
+  .envelope{height:200px}
+  .envelope.open .letter-peek{transform:translateY(-132px)}
+  .paper p{font-size:15px}
+  .lead{font-size:13px}
+  .seal{width:48px;height:48px;font-size:21px}
+  .actions{gap:8px}
+  .btn{padding:12px 18px;font-size:10.5px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+  html{scroll-behavior:auto}
+  .glow{opacity:.15}
+}
+</style>
+</head>
+<body>
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<main>
+  <div class="kicker">секретная доставка чувств</div>
+  <h1>Эй, <em>Кристина…</em></h1>
+  <p class="lead">Тут кое-что важное. Не переживай, экзамена не будет.<br>Просто нажми на конверт. ❤️</p>
+
+  <div class="scene">
+    <div class="envelope" id="envelope" role="button" tabindex="0"
+         aria-label="Открыть письмо Кристине" aria-expanded="false">
+      <div class="env-body">
+        <div class="letter-peek"><b>Для Кристины</b><small>открыть и улыбнуться</small></div>
+        <div class="flap"></div>
+        <div class="env-pocket"></div>
+        <div class="seal" aria-hidden="true">♥</div>
+      </div>
+    </div>
+  </div>
+  <div class="tap" id="tap">↑ нажми сюда, красавица ↑</div>
+
+  <section class="note" id="note" aria-live="polite" aria-hidden="true">
+    <article class="paper">
+      <p class="salute">моему дорогому человеку</p>
+      <h2>Кристинка, привет ❤️</h2>
+
+      <p>Кристинка, ты для меня стала очень дорогим человеком. Да, мы общаемся не слишком долго, но я не могу держать эти слова в себе.</p>
+
+      <p>Когда я ехал на первую прогулку, я думал, что мы просто будем молчать, ходить и не найдём общий язык, — и из-за этого мне было грустно, хахахахах. Но когда мы начали говорить про Егора Крида и ты начала рофлить, во мне моментально что-то поменялось. Я понял, что сильно тебя полюбил и нашёл ту самую крутую смешную девчонку.</p>
+
+      <p>Пока я ехал в метро домой, я был очень сильно рад и счастлив. Я почувствовал такие чувства любви и тепла, что был удивлён: я могу ощущать такие сильные и приятные чувства. Ты реально очень крутая и пиздатая девушка, и я очень сильно тебя люблю.</p>
+
+      <div class="aside">Да, виделись пару раз — но за эти пару раз я понял, что, блять, я тебя очень люблю. Ты очень крутая вайбовая персона, и с тобой очень интересно. Я просто очень люблю тебя. 🕵️‍♂️</div>
+
+      <p>Ты можешь пока что не отвечать взаимностью — или как сама хочешь. Просто я хотел тебе признаться и уже свободно говорить, что люблю тебя. Ты, конечно, скорее всего, сама видела, что я не просто заинтересован как друг. Я уверен, ты заметила, что я люблю тебя. Ну я такой человек, что уж поделаешь, ахазахаахазазаз.</p>
+
+      <p>Если вдруг ты меня тоже любишь — я буду очень рад. Но если хочешь, можешь пока что не отвечать, если не готова.</p>
+
+      <p>Ты очень красивая и очень милая девчонка. Мне было очень грустно, что ты мне не отвечала целыми днями, но когда я видел твои сообщения, что всё хорошо, я был очень рад и у меня поднималось настроение. Бля, я такого очень давно не ощущал — это тёплая любовь.</p>
+
+      <p>Я рад, что мы с тобой встретились. Я на самом деле очень хотел себе девушку — не какую-то любую или для плохих гнилых мыслей, я хотел очень хорошую и добрую девушку, с душой и настоящую. Ты, вась, реально та самая, о которой я думал. Ведь таких, как ты, реально мало. Какой нахуй мало — ты одна такая.</p>
+
+      <p>Я очень хотел встретиться и всё это в жизни сказать, но я уже две недели держусь, чтобы не сказать это. Знаю, что в жизни лучше и приятнее, но я не могу держать это в себе. Я, блять, тебя люблю, хахаахахахх ❤️</p>
+
+      <p class="signature">Твой человек <span>который очень тобой дорожит</span></p>
+      <div class="heart-row">♥ ♥ ♥</div>
+    </article>
+
+    <div class="actions">
+      <button class="btn primary" id="hearts" type="button">Отправить сердечки 💗</button>
+      <button class="btn" id="close" type="button">Спрятать письмо</button>
+    </div>
+  </section>
+
+  <footer>СОЗДАНО НЕ ПО ПОВОДУ, А ПО <span>ЛЮБВИ</span> · ДЛЯ КРИСТИНЫ</footer>
+</main>
+
+<script>
+(() => {
+  const envelope = document.getElementById('envelope');
+  const tap = document.getElementById('tap');
+  const note = document.getElementById('note');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function openLetter(){
+    if(document.body.classList.contains('opened')) return;
+    envelope.classList.add('open');
+    envelope.setAttribute('aria-expanded','true');
+    document.body.classList.add('opened');
+    note.setAttribute('aria-hidden','false');
+    tap.textContent = 'ну всё… теперь самое главное 💌';
+    setTimeout(() => note.scrollIntoView({behavior: prefersReduced ? 'auto' : 'smooth', block:'start'}), 650);
+    burst(22);
+  }
+
+  function closeLetter(){
+    envelope.classList.remove('open');
+    envelope.setAttribute('aria-expanded','false');
+    document.body.classList.remove('opened');
+    note.setAttribute('aria-hidden','true');
+    tap.textContent = '↑ нажми сюда, красавица ↑';
+    window.scrollTo({top:0, behavior: prefersReduced ? 'auto' : 'smooth'});
+  }
+
+  envelope.addEventListener('click', openLetter);
+  envelope.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      openLetter();
+    }
+  });
+  document.getElementById('close').addEventListener('click', closeLetter);
+  document.getElementById('hearts').addEventListener('click', () => burst(36));
+
+  function burst(count){
+    if(prefersReduced) return;
+    const symbols = ['♥','♡','✦','💗','💕'];
+    for(let i = 0; i < count; i++){
+      const el = document.createElement('span');
+      el.className = 'confetti';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = (35 + Math.random() * 30) + 'vw';
+      el.style.top = (40 + Math.random() * 20) + 'vh';
+      el.style.setProperty('--x', (Math.random() * 380 - 190) + 'px');
+      el.style.setProperty('--y', (-110 - Math.random() * 360) + 'px');
+      el.style.animationDelay = (Math.random() * .35) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }
+  }
+
+  const particles = document.getElementById('particles');
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < 34; i++){
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.textContent = Math.random() > .5 ? '✦' : '·';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.fontSize = (8 + Math.random() * 13) + 'px';
+    s.style.animationDelay = (Math.random() * 8) + 's';
+    s.style.animationDuration = (6 + Math.random() * 5) + 's';
+    frag.appendChild(s);
+  }
+  particles.appendChild(frag);
+})();
+</script>
+</body>
+</html>
