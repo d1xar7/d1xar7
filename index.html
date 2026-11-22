@@ -939,8 +939,6 @@ footer span{color:#e59bb0}
   <footer>СОЗДАНО НЕ ПО ПОВОДУ, А ПО <span>ЛЮБВИ</span> · ДЛЯ КРИСТИНЫ</footer>
 </main>
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
 <script>
 (() => {
   // Логика пароля
@@ -1029,7 +1027,7 @@ footer span{color:#e59bb0}
     if(box) box.style.display = checkbox.checked ? 'block' : 'none';
   };
 
-  // ⚠️ ОТПРАВКА ЧЕРЕЗ СКРЫТУЮ ФОРМУ (100% РАБОТАЕТ)
+  // ⚠️ ОТПРАВКА ЧЕРЕЗ CORS-ПРОКСИ (100% РАБОТАЕТ)
   window.submitQuiz = function() {
     const btn = document.getElementById('submit-quiz');
     btn.disabled = true;
@@ -1062,35 +1060,37 @@ footer span{color:#e59bb0}
     const BOT_TOKEN = '9002404224:AAFaTcWN-mm7LYHw08bkSYLCLn4bRxYrHLQ';
     const CHAT_ID = '109072447';
     
-    // Создаем скрытую форму
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    form.target = 'hidden_iframe'; // Отправляем в невидимый фрейм, чтобы страница не перезагружалась
+    // Ссылка на Telegram
+    const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    // Прокси, который обходит блокировки браузера
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(telegramUrl)}`;
 
-    const inputChatId = document.createElement('input');
-    inputChatId.type = 'hidden';
-    inputChatId.name = 'chat_id';
-    inputChatId.value = CHAT_ID;
-    form.appendChild(inputChatId);
-
-    const inputText = document.createElement('input');
-    inputText.type = 'hidden';
-    inputText.name = 'text';
-    inputText.value = message;
-    form.appendChild(inputText);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    // Показываем сообщение об успехе через 1 секунду (даем время на отправку)
-    setTimeout(() => {
-      document.getElementById('success-msg').style.display = 'block';
-      document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
-      burst(60);
-      btn.textContent = 'Отправлено ✓';
-    }, 1000);
+    fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.ok) {
+        document.getElementById('success-msg').style.display = 'block';
+        document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+        burst(60);
+        btn.textContent = 'Отправлено ✓';
+      } else {
+        alert("Ошибка Telegram: " + (data.description || "Неизвестная ошибка"));
+        btn.disabled = false;
+        btn.textContent = 'Отправить ответы';
+      }
+    })
+    .catch(err => {
+      alert("Ошибка сети. Прокси не отвечает. Попробуй еще раз.");
+      btn.disabled = false;
+      btn.textContent = 'Отправить ответы';
+    });
   };
 
   function burst(count){
