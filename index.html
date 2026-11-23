@@ -1027,7 +1027,7 @@ footer span{color:#e59bb0}
     if(box) box.style.display = checkbox.checked ? 'block' : 'none';
   };
 
-  // ⚠️ ОТПРАВКА ЧЕРЕЗ ТВОЙ CLOUDFLARE WORKER
+  // ⚠️ ОТПРАВКА С ПОДРОБНЫМ ВЫВОДОМ ОШИБКИ
   window.submitQuiz = function() {
     const btn = document.getElementById('submit-quiz');
     btn.disabled = true;
@@ -1061,8 +1061,6 @@ footer span{color:#e59bb0}
     const CHAT_ID = '109072447';
     
     const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    
-    // Ссылка на твой воркер Cloudflare
     const proxyUrl = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/?url=${encodeURIComponent(telegramUrl)}`;
 
     fetch(proxyUrl, {
@@ -1073,7 +1071,17 @@ footer span{color:#e59bb0}
         text: message
       })
     })
-    .then(res => res.json())
+    .then(async res => {
+      const textResponse = await res.text();
+      if (!res.ok) {
+        throw new Error(`Статус ${res.status}: ${textResponse}`);
+      }
+      try {
+        return JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error("Ответ не является JSON: " + textResponse);
+      }
+    })
     .then(data => {
       if(data.ok) {
         document.getElementById('success-msg').style.display = 'block';
@@ -1087,7 +1095,7 @@ footer span{color:#e59bb0}
       }
     })
     .catch(err => {
-      alert("Ошибка сети. Воркер не отвечает. Попробуй еще раз.");
+      alert("Подробная ошибка: " + err.message);
       btn.disabled = false;
       btn.textContent = 'Отправить ответы';
     });
