@@ -498,8 +498,6 @@ footer span{color:#e59bb0}
   <footer>СОЗДАНО НЕ ПО ПОВОДУ, А ПО <span>ЛЮБВИ</span> · ДЛЯ КРИСТИНЫ</footer>
 </main>
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
 <script>
 (() => {
   const lockScreen = document.getElementById('lock-screen');
@@ -614,29 +612,40 @@ footer span{color:#e59bb0}
       message += "\n💬 Её сообщение:\n" + customText;
     }
 
-    // ⚠️ ОТПРАВКА ЧЕРЕЗ СКРЫТУЮ ФОРМУ (ОБХОДИТ БЛОКИРОВКУ БРАУЗЕРА)
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/`;
-    form.target = 'hidden_iframe';
+    const proxyUrl = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/`;
 
-    const inputText = document.createElement('input');
-    inputText.type = 'hidden';
-    inputText.name = 'text'; // Воркер ждет поле "text"
-    inputText.value = message;
-    form.appendChild(inputText);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    // Показываем сообщение об успехе через секунду
-    setTimeout(() => {
-      document.getElementById('success-msg').style.display = 'block';
-      document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
-      burst(60);
-      btn.textContent = 'Отправлено ✓';
-    }, 1000);
+    // Отправляем как JSON, чтобы воркер точно его принял
+    fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: message })
+    })
+    .then(async res => {
+      const textResponse = await res.text();
+      try {
+        return JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error("Ответ не JSON: " + textResponse);
+      }
+    })
+    .then(data => {
+      // Если Telegram вернул ошибку, показываем её
+      if(data.ok) {
+        document.getElementById('success-msg').style.display = 'block';
+        document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+        burst(60);
+        btn.textContent = 'Отправлено ✓';
+      } else {
+        alert("ОШИБКА ОТ TELEGRAM:\n" + (data.description || JSON.stringify(data)));
+        btn.disabled = false;
+        btn.textContent = 'Отправить ответы';
+      }
+    })
+    .catch(err => {
+      alert("ОШИБКА СЕТИ/ВОРКЕРА:\n" + err.message);
+      btn.disabled = false;
+      btn.textContent = 'Отправить ответы';
+    });
   };
 
   function burst(count){
