@@ -29,6 +29,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
+/* ——— СТИЛЬНЫЙ 3D-ФОН ——— */
 .bg-container {
   position: fixed; inset: 0; z-index: 0; overflow: hidden;
   background: radial-gradient(circle at 50% 0%, #2a1624 0%, #120c17 70%, #0a060c 100%);
@@ -46,6 +47,7 @@ body{
   100% { transform: translate(-5%, -5%) scale(0.9); }
 }
 
+/* ——— ЭКРАН БЛОКИРОВКИ ——— */
 #lock-screen{
   position:fixed; inset:0; z-index:100;
   background: radial-gradient(ellipse at 50% 30%, #3a1e2b 0%, #120c17 80%);
@@ -81,6 +83,7 @@ body{
 .lock-error-msg{ color:#ff6b6b; font-size:13px; margin-top:15px; height:18px; opacity:0; transition:.3s; }
 .lock-error-msg.show{ opacity:1; }
 
+/* ——— ОСНОВНОЙ САЙТ ——— */
 main{
   width:min(100% - 40px, 820px); margin:auto; text-align:center; position:relative; z-index:2;
   padding:clamp(50px,8vw,90px) 0 60px; animation: fadeInMain 1s cubic-bezier(.2,.75,.2,1) forwards;
@@ -110,6 +113,7 @@ h1 em::after{
 
 .lead{ max-width:500px; margin:0 auto; color:var(--text-soft); font-size:clamp(14px,1.6vw,16px); line-height:1.85; text-wrap:pretty; }
 
+/* ——— 3D КОНВЕРТ ——— */
 .scene{ height:400px; display:grid; place-items:center; perspective:1500px; margin:20px auto 0; }
 .envelope{
   position:relative; width:min(380px,88vw); height:240px; cursor:pointer;
@@ -174,6 +178,7 @@ h1 em::after{
 }
 @keyframes pulse{50%{opacity:.4}}
 
+/* ——— ЗАПИСКА ——— */
 .note{
   max-height:0; opacity:0; overflow:hidden; transform:translateY(40px) scale(0.98); filter: blur(10px);
   transition:max-height 1.5s cubic-bezier(.2,.8,.2,1), opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1), filter 1s ease;
@@ -209,6 +214,7 @@ body.opened .note{
 
 .heart-row{ text-align:center; color:#c25b79; font-size:24px; letter-spacing:12px; margin-top:20px; opacity:.8; }
 
+/* ——— ИНТЕРАКТИВНАЯ ИГРА ——— */
 .question-box{ margin-top:50px; padding-top:40px; border-top:1px dashed rgba(217,141,160,0.5); text-align:center; }
 .game-title{ font:600 26px 'Playfair Display', serif; color:#8b3652; margin-bottom:30px; }
 .quiz-item{
@@ -323,6 +329,7 @@ footer span{color:#e59bb0}
   <div class="bg-blob blob-3"></div>
 </div>
 
+<!-- Экран блокировки -->
 <div id="lock-screen">
   <div class="lock-box">
     <div class="lock-icon">🔒</div>
@@ -342,7 +349,8 @@ footer span{color:#e59bb0}
   <p class="lead">Тут кое-что важное. Не переживай, экзамена не будет.<br>Просто нажми на конверт. ❤️</p>
 
   <div class="scene">
-    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Открыть письмо Кристине" aria-expanded="false">
+    <div class="envelope" id="envelope" role="button" tabindex="0"
+         aria-label="Открыть письмо Кристине" aria-expanded="false">
       <div class="env-body">
         <div class="letter-peek"><b>Для Кристины</b><small>открыть и улыбнуться</small></div>
         <div class="flap"></div>
@@ -490,6 +498,8 @@ footer span{color:#e59bb0}
   <footer>СОЗДАНО НЕ ПО ПОВОДУ, А ПО <span>ЛЮБВИ</span> · ДЛЯ КРИСТИНЫ</footer>
 </main>
 
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 <script>
 (() => {
   const lockScreen = document.getElementById('lock-screen');
@@ -604,44 +614,29 @@ footer span{color:#e59bb0}
       message += "\n💬 Её сообщение:\n" + customText;
     }
 
-    // ⚠️ ЗДЕСЬ ТОЛЬКО ССЫЛКА НА ВОРКЕР (ТОКЕНА НЕТ!)
-    const proxyUrl = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/`;
+    // ⚠️ ОТПРАВКА ЧЕРЕЗ СКРЫТУЮ ФОРМУ (ОБХОДИТ БЛОКИРОВКУ БРАУЗЕРА)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `https://dry-darkness-c04f.dimasarafanov85.workers.dev/`;
+    form.target = 'hidden_iframe';
 
-    fetch(proxyUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text: message
-      })
-    })
-    .then(async res => {
-      const textResponse = await res.text();
-      if (!res.ok) {
-        throw new Error(`Статус ${res.status}: ${textResponse}`);
-      }
-      try {
-        return JSON.parse(textResponse);
-      } catch (e) {
-        throw new Error("Ответ не является JSON: " + textResponse);
-      }
-    })
-    .then(data => {
-      if(data.ok) {
-        document.getElementById('success-msg').style.display = 'block';
-        document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
-        burst(60);
-        btn.textContent = 'Отправлено ✓';
-      } else {
-        alert("Ошибка Telegram: " + (data.description || "Неизвестная ошибка"));
-        btn.disabled = false;
-        btn.textContent = 'Отправить ответы';
-      }
-    })
-    .catch(err => {
-      alert("Подробная ошибка: " + err.message);
-      btn.disabled = false;
-      btn.textContent = 'Отправить ответы';
-    });
+    const inputText = document.createElement('input');
+    inputText.type = 'hidden';
+    inputText.name = 'text'; // Воркер ждет поле "text"
+    inputText.value = message;
+    form.appendChild(inputText);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    // Показываем сообщение об успехе через секунду
+    setTimeout(() => {
+      document.getElementById('success-msg').style.display = 'block';
+      document.getElementById('success-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+      burst(60);
+      btn.textContent = 'Отправлено ✓';
+    }, 1000);
   };
 
   function burst(count){
