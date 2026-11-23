@@ -257,6 +257,49 @@ body.opened .letter-reveal{
 
 .letter-divider{text-align:center;color:#b78178;font-size:14px;letter-spacing:.85em;margin:20px 0;opacity:.82}
 
+.scratch-zone{max-width:520px;margin:30px auto 42px;text-align:center}
+.scratch-heading{margin:0 0 13px;color:#91465f;font:600 20px 'Playfair Display',serif}
+.scratch-card{
+  position:relative;min-height:210px;display:grid;place-items:center;overflow:hidden;
+  border:1px solid rgba(208,151,158,.48);border-radius:22px;
+  background:linear-gradient(145deg,#fffdf6,#f8e3e4 60%,#f1dfe9);
+  box-shadow:0 14px 32px rgba(136,73,96,.13),inset 0 0 0 6px rgba(255,255,255,.42);
+}
+.scratch-message{padding:36px 24px;color:#8c3e5d;font:700 clamp(26px,5vw,38px)/1.3 'Playfair Display',serif;text-shadow:0 1px 0 #fff,0 5px 18px rgba(165,84,112,.16)}
+#scratch-layer{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;border-radius:inherit;transition:opacity .65s ease;-webkit-tap-highlight-color:transparent}
+#scratch-layer:focus-visible{outline:3px solid #bd6b82;outline-offset:-6px}
+#scratch-layer.revealed{opacity:0;pointer-events:none}
+.scratch-instruction{min-height:1.5em;margin:11px 0 0;color:#956a78;font:italic 13px/1.5 'Lora',Georgia,serif}
+
+.date-invite{
+  margin:42px auto 8px;padding:28px 24px;border:1px solid rgba(215,167,160,.6);border-radius:20px;
+  background:linear-gradient(150deg,rgba(255,250,243,.9),rgba(248,231,231,.92));
+  box-shadow:0 16px 38px rgba(141,80,101,.11),inset 0 1px 0 #fff;text-align:center;
+}
+.date-invite h3{color:#87445c;font:600 clamp(23px,4vw,29px)/1.25 'Playfair Display',serif}
+.date-invite > p{margin:8px 0 20px;color:#896976;font:italic 14px/1.6 'Lora',Georgia,serif}
+.date-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;text-align:center}
+.date-choice{position:relative;display:block;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.date-choice input{position:absolute;width:1px;height:1px;opacity:0}
+.date-choice-face{
+  min-height:92px;padding:13px 10px;border:1px solid rgba(213,166,174,.58);border-radius:15px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  color:#8e586b;background:rgba(255,255,255,.72);font:600 14px/1.35 'DM Sans',sans-serif;
+  box-shadow:0 4px 12px rgba(120,66,87,.05);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;
+}
+.date-choice-icon{font-size:23px;line-height:1}
+.date-choice input:checked + .date-choice-face{border-color:#b96580;background:#f8e2e7;color:#7e3854;box-shadow:0 0 0 2px rgba(185,101,128,.14),0 8px 20px rgba(144,70,99,.12);transform:translateY(-2px)}
+.date-choice input:focus-visible + .date-choice-face{outline:3px solid rgba(189,107,130,.36);outline-offset:2px}
+.date-choice:last-child{grid-column:1/-1}
+.date-custom-wrap{display:none;margin-top:14px;text-align:left}
+.date-custom-wrap label{display:block;margin-bottom:8px;color:#87445c;font:600 14px 'DM Sans',sans-serif}
+.date-custom-wrap textarea{width:100%;min-height:88px;padding:14px 16px;border:1px solid rgba(213,166,174,.72);border-radius:14px;background:#fff;color:#513641;font:16px/1.5 'DM Sans',sans-serif;resize:vertical;outline:none}
+.date-custom-wrap textarea:focus{border-color:#b96580;box-shadow:0 0 0 4px rgba(189,107,130,.14)}
+.date-send-button{width:100%;min-height:52px;margin-top:14px;padding:13px 20px;border:0;border-radius:30px;color:#fff;background:linear-gradient(135deg,#d58ca0,#a64e70);font:700 15px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 10px 24px rgba(166,78,112,.22);transition:transform .2s,box-shadow .2s}
+.date-send-button:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(166,78,112,.3)}
+.date-send-button:disabled{opacity:.62;cursor:wait;transform:none}
+.date-status{min-height:1.5em;margin:10px 0 0;color:#80576a;font:13px/1.5 'DM Sans',sans-serif}
+
 /* ——— ИНТЕРАКТИВНАЯ ИГРА ——— */
 .question-box{ position:relative;margin-top:50px; padding-top:40px; border-top:1px dashed rgba(201,137,145,.56); text-align:center; }
 .question-box::before{content:"✦";position:absolute;top:-13px;left:50%;padding:0 12px;transform:translateX(-50%);color:#bd7b82;background:#f8e9e5;font-size:15px}
@@ -417,6 +460,13 @@ footer span{color:#e59bb0}
   .aside{padding:15px 16px;font-size:13px}
   .signature{font-size:21px!important}
   .question-box{margin-top:36px;padding-top:30px}
+  .scratch-zone{margin:25px auto 34px}
+  .scratch-card{min-height:190px;border-radius:18px}
+  .scratch-message{padding:28px 18px;font-size:clamp(25px,7vw,34px)}
+  .date-invite{margin-top:34px;padding:22px 16px;border-radius:17px}
+  .date-options{gap:8px}
+  .date-choice-face{min-height:86px;padding:12px 8px;font-size:13px}
+  .date-send-button{min-height:54px;font-size:16px}
   .game-title{font-size:23px;margin-bottom:22px}
   .quiz-item{padding:19px 15px;margin-bottom:22px;border-radius:15px}
   .quiz-question{font-size:17px;line-height:1.55;margin-bottom:17px}
@@ -534,6 +584,15 @@ footer span{color:#e59bb0}
       <p class="signature letter-reveal" style="--delay:1.36s">Твой человек <span>который очень тобой дорожит</span></p>
       <div class="letter-divider letter-reveal" style="--delay:1.48s">✦　✧　✦</div>
 
+      <section class="scratch-zone letter-reveal" style="--delay:1.55s" aria-label="Скретч-открытка">
+        <h3 class="scratch-heading">Маленький секрет для тебя 💌</h3>
+        <div class="scratch-card">
+          <div class="scratch-message">Я тебя очень люблю,<br>красивая вась 💗</div>
+          <canvas id="scratch-layer" role="button" tabindex="0" aria-label="Сотри розовый слой, чтобы открыть послание"></canvas>
+        </div>
+        <p class="scratch-instruction" id="scratch-instruction" aria-live="polite">Проведи пальцем или мышкой по розовому слою ✨</p>
+      </section>
+
       <!-- ИНТЕРАКТИВНЫЙ БЛОК -->
       <div class="question-box">
         <div class="game-title letter-reveal" style="--delay:1.6s">Мини-игра на память 🤭</div>
@@ -643,6 +702,39 @@ footer span{color:#e59bb0}
         </div>
       </div>
 
+      <section class="date-invite letter-reveal" style="--delay:2.35s" aria-labelledby="date-title">
+        <h3 id="date-title">А теперь — наше свидание? 💕</h3>
+        <p>Выбирай, куда тебе хотелось бы сходить вместе</p>
+        <div class="date-options">
+          <label class="date-choice">
+            <input type="radio" name="date-choice" value="Каток">
+            <span class="date-choice-face"><span class="date-choice-icon">⛸️</span><span>Каток</span></span>
+          </label>
+          <label class="date-choice">
+            <input type="radio" name="date-choice" value="Ресторан">
+            <span class="date-choice-face"><span class="date-choice-icon">🍰</span><span>Ресторан</span></span>
+          </label>
+          <label class="date-choice">
+            <input type="radio" name="date-choice" value="Остров мечты">
+            <span class="date-choice-face"><span class="date-choice-icon">🎡</span><span>Остров мечты</span></span>
+          </label>
+          <label class="date-choice">
+            <input type="radio" name="date-choice" value="Просто погулять">
+            <span class="date-choice-face"><span class="date-choice-icon">🌙</span><span>Просто погулять</span></span>
+          </label>
+          <label class="date-choice">
+            <input type="radio" name="date-choice" value="custom">
+            <span class="date-choice-face"><span class="date-choice-icon">✍️</span><span>Свой вариант</span></span>
+          </label>
+        </div>
+        <div class="date-custom-wrap" id="date-custom-wrap">
+          <label for="date-custom-answer">Напиши, куда хочешь пойти 💗</label>
+          <textarea id="date-custom-answer" maxlength="500" placeholder="Твоя идея для свидания..."></textarea>
+        </div>
+        <button class="date-send-button" id="send-date-choice" type="button">Отправить мой выбор 💌</button>
+        <p class="date-status" id="date-status" aria-live="polite"></p>
+      </section>
+
     </article>
 
     <div class="actions">
@@ -692,6 +784,189 @@ footer span{color:#e59bb0}
   const tap = document.getElementById('tap');
   const note = document.getElementById('note');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const workerUrl = 'https://dry-darkness-c04f.dimasarafanov85.workers.dev/';
+
+  const scratchCanvas = document.getElementById('scratch-layer');
+  const scratchContext = scratchCanvas.getContext('2d');
+  const scratchInstruction = document.getElementById('scratch-instruction');
+  let scratchDrawing = false;
+  let lastScratchPoint = null;
+
+  function paintScratchCover() {
+    const rect = scratchCanvas.getBoundingClientRect();
+    if (!rect.width || !rect.height || !scratchContext) return;
+    const scale = Math.min(window.devicePixelRatio || 1, 3);
+    scratchCanvas.width = Math.round(rect.width * scale);
+    scratchCanvas.height = Math.round(rect.height * scale);
+    scratchContext.setTransform(scale, 0, 0, scale, 0, 0);
+
+    const cover = scratchContext.createLinearGradient(0, 0, rect.width, rect.height);
+    cover.addColorStop(0, '#e6a7b7');
+    cover.addColorStop(.52, '#ce829b');
+    cover.addColorStop(1, '#ac637f');
+    scratchContext.globalCompositeOperation = 'source-over';
+    scratchContext.fillStyle = cover;
+    scratchContext.fillRect(0, 0, rect.width, rect.height);
+
+    const glow = scratchContext.createRadialGradient(rect.width * .5, rect.height * .35, 5, rect.width * .5, rect.height * .35, rect.width * .7);
+    glow.addColorStop(0, 'rgba(255,239,222,.38)');
+    glow.addColorStop(1, 'rgba(255,239,222,0)');
+    scratchContext.fillStyle = glow;
+    scratchContext.fillRect(0, 0, rect.width, rect.height);
+
+    scratchContext.strokeStyle = 'rgba(255,241,230,.58)';
+    scratchContext.lineWidth = 1;
+    scratchContext.setLineDash([4, 7]);
+    roundedScratchFrame(scratchContext, 11, 11, rect.width - 22, rect.height - 22, 14);
+    scratchContext.stroke();
+    scratchContext.setLineDash([]);
+
+    scratchContext.textAlign = 'center';
+    scratchContext.textBaseline = 'middle';
+    scratchContext.fillStyle = 'rgba(255,248,238,.95)';
+    scratchContext.font = '700 13px "DM Sans", Arial, sans-serif';
+    scratchContext.fillText('ТУТ ЕСТЬ МАЛЕНЬКИЙ СЕКРЕТ', rect.width / 2, rect.height / 2 - 14);
+    scratchContext.font = 'italic 15px "Lora", Georgia, serif';
+    scratchContext.fillText('сотри розовый слой пальцем ✨', rect.width / 2, rect.height / 2 + 16);
+    scratchContext.font = '22px Georgia, serif';
+    scratchContext.fillText('✦', 32, 32);
+    scratchContext.fillText('♡', rect.width - 32, rect.height - 30);
+  }
+
+  function roundedScratchFrame(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + width, y, x + width, y + height, radius);
+    ctx.arcTo(x + width, y + height, x, y + height, radius);
+    ctx.arcTo(x, y + height, x, y, radius);
+    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.closePath();
+  }
+
+  function revealScratch() {
+    if (scratchCanvas.classList.contains('revealed')) return;
+    scratchCanvas.classList.add('revealed');
+    scratchInstruction.textContent = 'Секрет открыт: я тебя очень люблю 💗';
+    burst(18);
+  }
+
+  function scratchAt(event) {
+    const rect = scratchCanvas.getBoundingClientRect();
+    const point = {x:event.clientX - rect.left, y:event.clientY - rect.top};
+    scratchContext.globalCompositeOperation = 'destination-out';
+    scratchContext.lineWidth = 58;
+    scratchContext.lineCap = 'round';
+    scratchContext.lineJoin = 'round';
+    scratchContext.beginPath();
+    if (lastScratchPoint) {
+      scratchContext.moveTo(lastScratchPoint.x, lastScratchPoint.y);
+      scratchContext.lineTo(point.x, point.y);
+      scratchContext.stroke();
+    } else {
+      scratchContext.arc(point.x, point.y, 29, 0, Math.PI * 2);
+      scratchContext.fill();
+    }
+    lastScratchPoint = point;
+  }
+
+  function checkScratchProgress() {
+    const width = scratchCanvas.width;
+    const height = scratchCanvas.height;
+    if (!width || !height) return;
+    const pixels = scratchContext.getImageData(0, 0, width, height).data;
+    const stride = 20;
+    let checked = 0;
+    let erased = 0;
+    for (let y = Math.floor(stride / 2); y < height; y += stride) {
+      for (let x = Math.floor(stride / 2); x < width; x += stride) {
+        checked++;
+        if (pixels[(y * width + x) * 4 + 3] < 80) erased++;
+      }
+    }
+    if (checked && erased / checked >= .38) revealScratch();
+  }
+
+  paintScratchCover();
+  scratchCanvas.addEventListener('pointerdown', event => {
+    if (scratchCanvas.classList.contains('revealed')) return;
+    event.preventDefault();
+    scratchDrawing = true;
+    lastScratchPoint = null;
+    scratchCanvas.setPointerCapture(event.pointerId);
+    scratchAt(event);
+  });
+  scratchCanvas.addEventListener('pointermove', event => {
+    if (scratchDrawing) scratchAt(event);
+  });
+  function stopScratching() {
+    if (!scratchDrawing) return;
+    scratchDrawing = false;
+    lastScratchPoint = null;
+    checkScratchProgress();
+  }
+  scratchCanvas.addEventListener('pointerup', stopScratching);
+  scratchCanvas.addEventListener('pointercancel', stopScratching);
+  scratchCanvas.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      revealScratch();
+    }
+  });
+
+  const dateCustomWrap = document.getElementById('date-custom-wrap');
+  document.querySelectorAll('input[name="date-choice"]').forEach(input => {
+    input.addEventListener('change', () => {
+      const isCustom = input.checked && input.value === 'custom';
+      dateCustomWrap.style.display = isCustom ? 'block' : 'none';
+      document.getElementById('date-status').textContent = '';
+    });
+  });
+
+  document.getElementById('send-date-choice').addEventListener('click', event => {
+    const button = event.currentTarget;
+    const status = document.getElementById('date-status');
+    const selected = document.querySelector('input[name="date-choice"]:checked');
+    if (!selected) {
+      status.textContent = 'Сначала выбери, куда тебе хочется 💗';
+      return;
+    }
+
+    let choice = selected.value;
+    if (choice === 'custom') {
+      choice = document.getElementById('date-custom-answer').value.trim();
+      if (!choice) {
+        status.textContent = 'Напиши свой вариант свидания ✍️';
+        document.getElementById('date-custom-answer').focus();
+        return;
+      }
+    }
+
+    button.disabled = true;
+    button.textContent = 'Отправляю тебе ответ…';
+    status.textContent = '';
+    const dateMessage = `Выбор свидания от Кристины 💌\n\nОна выбрала: ${choice}`;
+
+    fetch(workerUrl, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:dateMessage})
+    })
+    .then(async response => {
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.description || 'Не удалось отправить ответ.');
+      return data;
+    })
+    .then(() => {
+      status.textContent = 'Ура, я получил твой выбор. Уже жду наше свидание 💕';
+      button.textContent = 'Выбор отправлен ✓';
+      burst(22);
+    })
+    .catch(() => {
+      status.textContent = 'Не получилось отправить. Проверь интернет и попробуй ещё раз.';
+      button.disabled = false;
+      button.textContent = 'Отправить мой выбор 💌';
+    });
+  });
 
   function openLetter(){
     if(document.body.classList.contains('opened')) return;
@@ -700,6 +975,7 @@ footer span{color:#e59bb0}
     document.body.classList.add('opened');
     note.setAttribute('aria-hidden','false');
     tap.textContent = 'ну всё… теперь самое главное 💌';
+    setTimeout(paintScratchCover, 900);
     setTimeout(() => note.scrollIntoView({behavior: prefersReduced ? 'auto' : 'smooth', block:'start'}), 700);
     burst(30);
   }
