@@ -299,15 +299,49 @@ footer span{color:#e59bb0}
 }
 
 @media (max-width:480px){
-  main{padding-top:clamp(32px,7vw,52px)}
-  .scene{height:320px;margin-top:10px}
-  .envelope{height:200px}
-  .envelope.open .letter-peek{transform:translateY(-135px)}
-  .paper p{font-size:15px}
-  .lead{font-size:13px}
-  .seal{width:50px;height:50px;font-size:22px}
-  .actions{gap:10px}
-  .btn{padding:13px 20px;font-size:11px}
+  main{width:calc(100% - 28px);padding:32px 0 36px}
+  .kicker{gap:7px;padding:9px 12px;font-size:9px;letter-spacing:.14em}
+  h1{font-size:clamp(36px,11vw,48px);margin:24px 0 14px}
+  .lead{font-size:14px;line-height:1.7;padding:0 4px}
+  .scene{height:285px;margin-top:8px}
+  .envelope{width:min(340px,92vw);height:180px}
+  .envelope.open .letter-peek{transform:translateY(-118px)}
+  .letter-peek b{font-size:clamp(23px,7vw,30px)}
+  .tap{font-size:10px;letter-spacing:.14em;padding:0 8px}
+  .paper{padding:26px 20px;border-radius:14px}
+  .paper::before{inset:8px}
+  .paper::after{right:20px;top:14px;font-size:26px}
+  .paper h2{font-size:clamp(29px,8vw,38px);margin-bottom:22px}
+  .paper p{font-size:15px;line-height:1.75}
+  .aside{padding:15px 16px;font-size:13px}
+  .signature{font-size:21px!important}
+  .question-box{margin-top:36px;padding-top:30px}
+  .game-title{font-size:23px;margin-bottom:22px}
+  .quiz-item{padding:17px 14px;margin-bottom:18px;border-radius:14px}
+  .quiz-question{font-size:16px;line-height:1.45;margin-bottom:14px}
+  .quiz-options{gap:9px}
+  .quiz-label{gap:10px;padding:13px 12px;font-size:14px;line-height:1.4}
+  .quiz-label .checkmark{width:24px;height:24px}
+  .custom-input-box input,.text-answer-box textarea{font-size:16px;padding:14px}
+  .text-answer-box{margin-top:24px}
+  .text-answer-box label{font-size:14px;line-height:1.5}
+  .text-answer-box textarea{min-height:120px}
+  .submit-btn{min-height:54px;padding:15px 18px;font-size:16px;margin-top:20px}
+  .success-msg{padding:18px;font-size:16px}
+  .actions{gap:10px;margin-top:26px}
+  .btn{width:100%;min-height:48px;padding:13px 18px;font-size:12px}
+  footer{margin-top:40px;font-size:9px;letter-spacing:.14em;padding:0 8px}
+  .bg-blob{filter:blur(65px);animation-duration:30s}
+  .blob-3{display:none}
+}
+
+@media (max-width:360px){
+  main{width:calc(100% - 22px)}
+  .paper{padding:24px 16px}
+  .quiz-item{padding:15px 12px}
+  .quiz-label{padding:12px 10px;font-size:13px}
+  .envelope{height:165px}
+  .envelope.open .letter-peek{transform:translateY(-108px)}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -410,7 +444,7 @@ footer span{color:#e59bb0}
               Скорее бы заговорить про Егора Крида
             </label>
             <label class="quiz-label">
-              <input type="checkbox" name="q1" value="custom" onchange="toggleCustom(this, 'custom1')">
+              <input type="checkbox" name="q1" value="custom">
               <span class="checkmark"></span>
               Свой вариант
             </label>
@@ -439,7 +473,7 @@ footer span{color:#e59bb0}
               Думал только о шаурме
             </label>
             <label class="quiz-label">
-              <input type="checkbox" name="q2" value="custom" onchange="toggleCustom(this, 'custom2')">
+              <input type="checkbox" name="q2" value="custom">
               <span class="checkmark"></span>
               Свой вариант
             </label>
@@ -468,7 +502,7 @@ footer span{color:#e59bb0}
               Твоя искренность и доброта
             </label>
             <label class="quiz-label">
-              <input type="checkbox" name="q3" value="custom" onchange="toggleCustom(this, 'custom3')">
+              <input type="checkbox" name="q3" value="custom">
               <span class="checkmark"></span>
               Свой вариант
             </label>
@@ -564,17 +598,17 @@ footer span{color:#e59bb0}
   document.querySelectorAll('.quiz-label').forEach(label => {
     label.addEventListener('click', function() {
       const input = this.querySelector('input');
-      if(input.type === 'checkbox' && input.value === 'custom') {
-         input.checked = !input.checked;
-         const boxId = this.querySelector('input').getAttribute('onchange').match(/'([^']+)'/)[1];
-         const box = document.getElementById(boxId);
-         if(box) box.style.display = input.checked ? 'block' : 'none';
-      }
       setTimeout(() => {
         document.querySelectorAll(`input[name="${input.name}"]`).forEach(inp => {
            inp.closest('.quiz-label').classList.toggle('selected', inp.checked);
         });
       }, 10);
+    });
+  });
+
+  [['q1', 'custom1'], ['q2', 'custom2'], ['q3', 'custom3']].forEach(([name, boxId]) => {
+    document.querySelectorAll(`input[name="${name}"][value="custom"]`).forEach(input => {
+      input.addEventListener('change', () => toggleCustom(input, boxId));
     });
   });
 
