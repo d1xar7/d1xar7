@@ -266,7 +266,7 @@ body.opened .letter-reveal{
   box-shadow:0 14px 32px rgba(136,73,96,.13),inset 0 0 0 6px rgba(255,255,255,.42);
 }
 .scratch-message{padding:36px 24px;color:#8c3e5d;font:700 clamp(26px,5vw,38px)/1.3 'Playfair Display',serif;text-shadow:0 1px 0 #fff,0 5px 18px rgba(165,84,112,.16)}
-#scratch-layer{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;border-radius:inherit;transition:opacity .65s ease;-webkit-tap-highlight-color:transparent}
+#scratch-layer{position:absolute;inset:0;width:100%;height:100%;touch-action:none;overscroll-behavior:contain;cursor:crosshair;border-radius:inherit;transition:opacity .65s ease;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #scratch-layer:focus-visible{outline:3px solid #bd6b82;outline-offset:-6px}
 #scratch-layer.revealed{opacity:0;pointer-events:none}
 .scratch-instruction{min-height:1.5em;margin:11px 0 0;color:#956a78;font:italic 13px/1.5 'Lora',Georgia,serif}
@@ -850,9 +850,9 @@ footer span{color:#e59bb0}
     burst(18);
   }
 
-  function scratchAt(event) {
+  function scratchAt(clientX, clientY) {
     const rect = scratchCanvas.getBoundingClientRect();
-    const point = {x:event.clientX - rect.left, y:event.clientY - rect.top};
+    const point = {x:clientX - rect.left, y:clientY - rect.top};
     scratchContext.globalCompositeOperation = 'destination-out';
     scratchContext.lineWidth = 58;
     scratchContext.lineCap = 'round';
@@ -887,25 +887,48 @@ footer span{color:#e59bb0}
   }
 
   paintScratchCover();
-  scratchCanvas.addEventListener('pointerdown', event => {
-    if (scratchCanvas.classList.contains('revealed')) return;
-    event.preventDefault();
-    scratchDrawing = true;
-    lastScratchPoint = null;
-    scratchCanvas.setPointerCapture(event.pointerId);
-    scratchAt(event);
-  });
-  scratchCanvas.addEventListener('pointermove', event => {
-    if (scratchDrawing) scratchAt(event);
-  });
   function stopScratching() {
     if (!scratchDrawing) return;
     scratchDrawing = false;
     lastScratchPoint = null;
     checkScratchProgress();
   }
-  scratchCanvas.addEventListener('pointerup', stopScratching);
-  scratchCanvas.addEventListener('pointercancel', stopScratching);
+
+  const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (touchDevice) {
+    scratchCanvas.addEventListener('touchstart', event => {
+      event.preventDefault();
+      if (scratchCanvas.classList.contains('revealed') || !event.touches.length) return;
+      scratchDrawing = true;
+      lastScratchPoint = null;
+      scratchAt(event.touches[0].clientX, event.touches[0].clientY);
+    }, {passive:false});
+    scratchCanvas.addEventListener('touchmove', event => {
+      event.preventDefault();
+      if (scratchDrawing && event.touches.length) {
+        scratchAt(event.touches[0].clientX, event.touches[0].clientY);
+      }
+    }, {passive:false});
+    scratchCanvas.addEventListener('touchend', event => {
+      event.preventDefault();
+      stopScratching();
+    }, {passive:false});
+    scratchCanvas.addEventListener('touchcancel', stopScratching, {passive:false});
+  } else {
+    scratchCanvas.addEventListener('pointerdown', event => {
+      if (scratchCanvas.classList.contains('revealed')) return;
+      event.preventDefault();
+      scratchDrawing = true;
+      lastScratchPoint = null;
+      scratchCanvas.setPointerCapture(event.pointerId);
+      scratchAt(event.clientX, event.clientY);
+    });
+    scratchCanvas.addEventListener('pointermove', event => {
+      if (scratchDrawing) scratchAt(event.clientX, event.clientY);
+    });
+    scratchCanvas.addEventListener('pointerup', stopScratching);
+    scratchCanvas.addEventListener('pointercancel', stopScratching);
+  }
   scratchCanvas.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
